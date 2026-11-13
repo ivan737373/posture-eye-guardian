@@ -3,6 +3,7 @@
 """
 import math
 import time
+import sys
 from pathlib import Path
 from contextlib import ExitStack
 from dataclasses import replace
@@ -28,7 +29,9 @@ class PostureDetector:
         self._shape = None
         self.pose_calibration = Calibration(self.config)
         self.distance_calibration = Calibration(self.config)
-        root = Path(model_dir) if model_dir else Path(__file__).resolve().parents[1]/'models'
+        root = Path(model_dir) if model_dir else (
+            Path(sys._MEIPASS) / 'models' if getattr(sys, 'frozen', False) else Path(__file__).resolve().parents[
+                                                                                    1] / 'models')
         pose_path, face_path = root/'pose_landmarker_lite.task', root/'face_landmarker.task'
         for path in (pose_path, face_path):
             if not path.is_file():

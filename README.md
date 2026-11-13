@@ -221,3 +221,8 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 | 查看提交历史 | `git log --oneline` |
 | 查看远程地址 | `git remote -v` |
 | 撤销未提交的改动 | `git checkout -- 文件名` |
+## 七、打包与运行说明（组员 D 补充）
+- 本项目已使用 PyInstaller 成功打包为 Windows 可执行文件（.exe）。
+- 运行说明：直接双击 `健康坐姿助手.exe` 即可运行，无需配置 Python 环境。
+- 图表导出：在程序界面点击“查看健康报告”，在弹窗中点击“导出健康报告 (PNG图片)”，会生成 `健康报告图表.png` 并弹窗提示保存路径。
+- 数据说明：首次运行会在同级目录自动生成 `health.db` 数据库和 `logging.txt` 日志文件。

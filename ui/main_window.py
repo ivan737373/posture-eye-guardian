@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
 )
 
 from data import database
+from ui.charts import ChartDialog
 
 POLL_MS = 50
 
@@ -135,6 +136,9 @@ class SettingsDialog(QDialog):
 
 # ==================== 主窗口 ====================
 class MainWindow(QMainWindow):
+    def _open_report(self):
+        dlg = ChartDialog(self)
+        dlg.exec()
     def __init__(self, worker, result_q):
         super().__init__()
         self._worker = worker
@@ -205,14 +209,16 @@ class MainWindow(QMainWindow):
         self.btn_calib_p = self._create_btn("校准坐姿", "#2980b9")
         self.btn_calib_d = self._create_btn("校准距离", "#2980b9")
         self.btn_settings = self._create_btn("偏好设置", "#7f8c8d")
+        self.btn_report = self._create_btn("查看健康报告", "#9b59b6")  # 紫色按钮，比较显眼
         self.btn_reset = self._create_btn("重置校准", "#c0392b")
         
         self.btn_calib_p.clicked.connect(lambda: self._worker.start_posture_calibration())
         self.btn_calib_d.clicked.connect(lambda: self._worker.start_distance_calibration(60.0))
         self.btn_settings.clicked.connect(self._open_settings)
+        self.btn_report.clicked.connect(self._open_report)
         self.btn_reset.clicked.connect(lambda: self._worker.reset_calibration())
-        
-        for btn in (self.btn_calib_p, self.btn_calib_d, self.btn_settings, self.btn_reset):
+
+        for btn in (self.btn_calib_p, self.btn_calib_d, self.btn_settings, self.btn_report, self.btn_reset):
             right_layout.addWidget(btn)
 
         main_layout.addWidget(right_widget, stretch=1)
