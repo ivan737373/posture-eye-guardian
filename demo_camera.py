@@ -1,4 +1,4 @@
-"""先用尺量好参考距离；P坐姿校准，D距离校准，R清空，Q/ESC退出。"""
+"""P坐姿校准,D距离校准,R清空,Q/ESC退出"""
 import argparse
 import cv2
 from vision import PostureDetector
@@ -18,7 +18,7 @@ def main():
               else cv2.VideoCapture(args.camera))
     try:
         if not camera.isOpened():
-            raise RuntimeError('摄像头打不开：检查设备编号、隐私权限和占用情况')
+            raise RuntimeError('摄像头打不开：检查设备')
         with PostureDetector() as detector:
             print('P: 坐直并保持，开始坐姿校准')
             print(f'D: 正脸保持在镜头前约{args.reference_cm}cm，开始距离校准')
@@ -51,7 +51,7 @@ def main():
                     f"D calibration: {dc['state']} {dc['progress']*100:.0f}% {dc['message']}",
                     'P: posture | D: distance | R: reset | Q: quit',
                 ]
-                # 使用独立面板，避免小分辨率下文字遮住整个人脸。
+                # 单独一个面板记录数据，和摄像头画面分开
                 panel = detector.np.zeros(
                     (30 * len(lines) + 20, max(1100, frame.shape[1]), 3),
                     dtype='uint8'

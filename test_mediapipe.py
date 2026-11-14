@@ -8,19 +8,19 @@ from mediapipe.tasks.python import vision
 
 
 def main():
-    # 根据当前脚本位置寻找模型，不依赖终端所在目录
+    # 根据当前脚本位置寻找模型（不依赖终端所在目录）
     project_dir = Path(__file__).resolve().parent
     model_dir = project_dir / "models"
 
     pose_path = model_dir / "pose_landmarker_lite.task"
     face_path = model_dir / "face_landmarker.task"
 
-    # 检查文件是否存在
+    # 文件是否存在
     for path in (pose_path, face_path):
         if not path.is_file():
             raise FileNotFoundError(f"找不到模型文件：{path}")
 
-    # 人体检测器配置
+    # 人体检测器
     pose_options = vision.PoseLandmarkerOptions(
         base_options=python.BaseOptions(
             model_asset_path=str(pose_path)
@@ -29,7 +29,7 @@ def main():
         num_poses=1,
     )
 
-    # 人脸检测器配置
+    # 人脸
     face_options = vision.FaceLandmarkerOptions(
         base_options=python.BaseOptions(
             model_asset_path=str(face_path)
@@ -64,7 +64,7 @@ def main():
                     print("摄像头画面读取失败。")
                     break
 
-                # OpenCV读取的是BGR，MediaPipe使用RGB
+                # OpenCV读取BGR，MediaPipe使用RGB
                 rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
                 image = mp.Image(
@@ -72,7 +72,7 @@ def main():
                     data=rgb_frame,
                 )
 
-                # VIDEO模式要求时间戳递增，单位为毫秒
+                # VIDEO模式时间戳递增，单位毫秒
                 timestamp = int(
                     (time.monotonic() - start_time) * 1000
                 )
@@ -88,8 +88,7 @@ def main():
 
                 height, width = frame.shape[:2]
 
-                # 绘制人体关键点：
-                # 0鼻子、7左耳、8右耳、11左肩、12右肩
+                # 人体关键点，0鼻子，7左耳，8右耳，11左肩，12右肩
                 if pose_result.pose_landmarks:
                     landmarks = pose_result.pose_landmarks[0]
                     points = {}
@@ -124,7 +123,7 @@ def main():
                             2,
                         )
 
-                # 绘制人脸关键点
+                # 人脸关键点
                 if face_result.face_landmarks:
                     for landmark in face_result.face_landmarks[0]:
                         if not (

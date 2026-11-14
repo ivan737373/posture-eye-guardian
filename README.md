@@ -1,8 +1,7 @@
 # A：姿态与距离识别模块——交接说明
 
-本说明对应我们最后约定的修改：Head bad仅判断头部左右偏移；Hunch bad由头部向下偏移或耳—肩水平距离比率异常触发。肩部倾斜、距离过近保留。持续5秒、提醒冷却、保存记录由B负责。
-
-注意：本次更新的是说明文档，不会自动修改你电脑里的Python文件。请确认之前给出的代码修改已经应用；旧版example_for_b.py及测试也需要按本说明核对。
+Head bad判断头部左右偏移；Hunch bad由头部向下偏移或耳—肩水平距离比率异常触发。 肩部倾斜、距离过近保留。
+持续5秒、提醒冷却、保存记录由B负责。
 
 ## 1. 文件放在哪里、分别负责什么
 
@@ -21,8 +20,6 @@
 | `requirements.txt`（若保留） | 起步依赖列表 | 已有环境可不重复安装 |
 | `requirements-vision.txt` | A在实际可运行环境导出的依赖版本 | 需要 |
 | `README.md` | 本交接说明；下载后可将文件重命名为README.md | 需要 |
-
-不要发送整个venv。B使用自己的虚拟环境安装依赖。
 
 ## 2. 各函数有什么功能
 
@@ -79,7 +76,7 @@
 
 `肩角变化 = 当前肩线角度 - 校准肩线角度`
 
-当`abs(肩角变化) > shoulder_threshold_deg`时，`shoulder_abnormal=True`，默认8度。
+当`abs(肩角变化) > shoulder_threshold_deg`时，`shoulder_abnormal=True`，默认4度。
 
 ### 头部左右偏移：Head bad
 
@@ -113,7 +110,7 @@
 在`vision/measurements.py`的`VisionConfig`中：
 
 ```python
-shoulder_threshold_deg: float = 8.0
+shoulder_threshold_deg: float = 4.0
 head_threshold_ratio: float = 0.15
 hunchback_threshold_ratio: float = 0.40
 min_distance_cm: float = 50.0
